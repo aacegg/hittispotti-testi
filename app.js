@@ -404,10 +404,13 @@
     el.menuBtn.setAttribute("aria-expanded", "false");
   }
 
-  /* Onko kesken olevassa sarjassa mitään menetettävää: yksikin biisi, jota on
-   * ehditty ohittaa tai arvata. Koskematon sarja saa vaihtua ilman kyselyä. */
-  const atRisk = () => state.view === "game" && state.rounds.some((r) => r.finished || r.step > 0);
-  const freeStarted = () => state.mode === "free" && atRisk();
+  /* Onko kesken olevaan sarjaan koskettu: yksikin biisi, jota on ehditty
+   * ohittaa tai arvata. Koskematon sarja saa vaihtua ilman kyselyä. */
+  const sarjaAloitettu = () => state.view === "game" && state.rounds.some((r) => r.finished || r.step > 0);
+  /* Vain vapaa sarja voi oikeasti kadota. Päivän sarja tallennetaan joka
+   * toiminnon jälkeen ja palautuu sellaisenaan (persistDaily), joten siitä
+   * poistuminen ei hävitä mitään. */
+  const freeStarted = () => state.mode === "free" && sarjaAloitettu();
 
   function refreshDrawer() {
     const done = store.get("daily:" + todayKey(), null);
@@ -2258,8 +2261,21 @@
       toast("Uusi sarja.");
       return;
     }
-    if ((target === "daily" || target === "free") && atRisk()
-      && !confirm("Kesken oleva sarja menetetään. Vaihdetaanko?")) return;
+    /* Varmistus vain siitä mikä oikeasti menetetään.
+     *
+     * Aiemmin tämä kysyttiin kummastakin pelimuodosta poistuttaessa, mikä oli
+     * päivän pelissä yksinkertaisesti valhe: päivän sarja tallennetaan joka
+     * ohituksen, arvauksen ja biisin vaihdon jälkeen, ja se palautuu samasta
+     * kohdasta samoilla pisteillä. Vapaata sarjaa ei tallenneta lainkaan, eli
+     * vain se katoaa. Väärä varoitus on pahempi kuin puuttuva: se opettaa
+     * ohittamaan varoitukset lukematta, jolloin oikeakaan ei enää pysäytä. */
+    if (target === "daily" || target === "free") {
+      // Vapaa peli vapaan pelin päälle aloittaa uuden sarjan, ei vaihda muotoa.
+      const uusiVapaa = target === "free" && state.mode === "free";
+      if (freeStarted() && !confirm(uusiVapaa
+        ? "Sarja alkaa alusta ja pisteet nollautuvat. Jatketaanko?"
+        : "Kesken oleva vapaa sarja menetetään. Vaihdetaanko?")) return;
+    }
     closeDrawer();
     stopPlayback();
     lahetaArvio();
