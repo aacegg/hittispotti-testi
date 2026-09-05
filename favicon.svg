@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="HittiSpotti">
+  <!-- Viisi palkkia: aaltomuoto, eli ääni. Värit ovat pelin omat
+       vaikeustasot helposta mahdottomaan, joten merkki kertoo molemmat asiat
+       kerralla eikä lainaa väriä mistään ulkopuolelta. Korkeudet eivät nouse
+       tasaisesti, koska tasainen nousu luetaan kenttävoimakkuudeksi eikä
+       ääneksi. Palkit ovat 52 x 46 yksikön lohkona keskellä 64:n ruutua. -->
+  <rect width="64" height="64" rx="14" fill="#0a0908"/>
+  <rect x="6"  y="35.4" width="8" height="19.6" rx="4" fill="#5ecf9a"/>
+  <rect x="17" y="20.2" width="8" height="34.8" rx="4" fill="#bcd14a"/>
+  <rect x="28" y="9"    width="8" height="46"   rx="4" fill="#f5b32e"/>
+  <rect x="39" y="26.6" width="8" height="28.4" rx="4" fill="#ff8a4c"/>
+  <rect x="50" y="15.4" width="8" height="39.6" rx="4" fill="#ff5f6d"/>
+</svg>

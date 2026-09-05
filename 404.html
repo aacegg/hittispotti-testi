@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Sivua ei löytynyt – HittiSpotti</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <!-- Ilman ?v=-versiota tarkoituksella: virhesivu on omavarainen eikä sitä
+       julkaista muun aineiston mukana, joten versionumero jäisi jälkeen.
+       Näin kävikin: se osoitti pitkään versioon 41 muun ollessa 60. -->
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+  <style>
+    /* Sama paletti ja ladonta kuin pelissä, mutta omavaraisena: virhesivun ei
+       kuulu jäädä lataamatta siksi, että jokin muu tiedosto puuttuu. */
+    :root { --bg:#0a0908; --text:#f2ebdf; --muted:#8a8073; --line:#2a2521; --live:#f5b32e; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100dvh; display: grid; place-items: center;
+      padding: 24px; background: var(--bg); color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 15px; line-height: 1.5; text-align: center;
+    }
+    main { max-width: 380px; }
+    .merkki {
+      display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px;
+      font-size: 20px; font-weight: 800; letter-spacing: -.035em;
+    }
+    .merkki::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--live); }
+    .merkki em { font-style: normal; font-weight: 400; }
+    h1 { margin: 0 0 8px; font-size: 34px; font-weight: 800; letter-spacing: -.035em; line-height: 1.05; }
+    p { margin: 0 0 24px; color: var(--muted); }
+    a.btn {
+      display: inline-block; padding: 14px 24px; border: 1px solid var(--live);
+      border-radius: 3px; background: var(--live); color: #17120a;
+      font-weight: 700; text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="merkki">Hitti<em>Spotti</em></span>
+    <h1>Sivua ei löytynyt</h1>
+    <p>Osoite meni jotenkin väärin. Päivän biisit odottavat silti.</p>
+    <a class="btn" href="/">Pelaamaan</a>
+  </main>
+</body>
+</html>

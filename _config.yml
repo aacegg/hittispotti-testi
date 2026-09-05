@@ -1,0 +1,24 @@
+# GitHub Pages ajaa sivuston Jekyllin läpi, ja tämä kertoo sille mitä EI
+# julkaista. Repo pysyy julkisena ja tiedostot pysyvät gitissä, mutta ne
+# eivät enää vastaa osoitteessa hittispotti.fi.
+#
+# Nämä ovat projektin omia työkaluja eivätkä osa peliä. Mitattuna esimerkiksi
+# scripts/tee_arviointi.py vastasi 200:lla eli kuka tahansa osoitteen arvaava
+# sai sen ladattua. Mitään salaista niissä ei ole, mutta ne eivät kuulu
+# pelaajille eivätkä hakukoneille.
+#
+# Huomaa: tämä ei suojaa peliä itseään. app.js, style.css ja songs.json
+# menevät jokaiselle kävijälle joka tapauksessa, koska peli ei toimi ilman
+# niitä. Staattisella sivustolla lähdekoodi ja sivusto ovat sama asia.
+# arviointi.html on tässä poikkeus eikä sitä suljeta pois. Se on ylläpitäjän
+# työkalu, jolla vaikeustasot kuunnellaan ja valitaan, ja se on tehtävä
+# puhelimella: tasoa ei voi arvioida lukematta, se pitää kuulla. Siihen ei ole
+# linkkiä mistään ja se on noindex-merkitty, joten sen löytää vain osoitteen
+# tietämällä. Se ei myöskään näytä mitään mitä julkinen songs.json ei jo
+# kertoisi, joten julkaisemisesta ei seuraa uutta paljastusta.
+exclude:
+  - README.md
+  - palvelin/
+  - ehdotukset.json
+  - scripts/
+  - katalogi.html

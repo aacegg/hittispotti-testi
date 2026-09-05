@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex, nofollow">
+  <title>ESIKATSELU · HittiSpotti – tunnista suomibiisi sekunnin kymmenyksestä</title>
+  <meta name="description" content="Musiikkivisa suomalaisilla biiseillä. Kuuntele 0,1 sekunnin pätkä ja arvaa kappale. Mitä nopeammin tunnistat, sitä enemmän pisteitä.">
+  <meta name="theme-color" content="#0a0908">
+
+  <!-- Linkin esikatselu jaettaessa ja hakutuloksissa. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="HittiSpotti">
+  <meta property="og:locale" content="fi_FI">
+  <meta property="og:url" content="https://hittispotti.fi/">
+  <meta property="og:title" content="HittiSpotti – tunnistatko suomibiisin 0,1 sekunnista?">
+  <meta property="og:description" content="Musiikkivisa suomalaisilla biiseillä. Viisi uutta biisiä joka päivä, sama kaikille. Mitä lyhyemmästä pätkästä tunnistat, sitä enemmän pisteitä.">
+  <meta property="og:image" content="https://hittispotti.fi/jakokuva.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="HittiSpotti – tunnistatko biisin 0,1 sekunnista?">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Faviconissa on versio kuten muillakin: selaimet pitävät välilehden
+       kuvakkeesta kiinni omassa välimuistissaan sitkeämmin kuin mistään
+       muusta, eikä pelkkä uusi tiedostosisältö samassa osoitteessa riitä
+       vaihtamaan sitä. -->
+  <link rel="icon" href="favicon.svg?v=90" type="image/svg+xml">
+  <!-- iOS ei tue SVG:tä kotinäytön kuvakkeena: SVG:llä se otti sivusta
+       ruudunkaappauksen kuvakkeen sijaan. 180 px on iPhonen koko. -->
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=90">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=90">
+  <link rel="manifest" href="manifest.webmanifest?v=90">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="HittiSpotti">
+  <link rel="preload" href="fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css?v=90">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "HittiSpotti",
+    "url": "https://hittispotti.fi/",
+    "description": "Musiikkivisa suomalaisilla biiseillä. Kuuntele 0,1 sekunnin pätkä ja arvaa kappale. Viisi uutta biisiä joka päivä, sama kaikille pelaajille.",
+    "inLanguage": "fi",
+    "genre": ["Musiikkivisa", "Tietovisa"],
+    "gamePlatform": "Verkkoselain",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Kaikki, joissa on selain",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+  }
+  </script>
+</head>
+<body>
+
+  <div class="scrim" id="scrim"></div>
+
+  <aside class="drawer" id="drawer" aria-label="Valikko">
+    <div class="drawer-head">
+      <span class="wordmark">Hitti<em>Spotti</em></span>
+      <button type="button" class="iconbtn" id="drawer-close" aria-label="Sulje valikko">✕</button>
+    </div>
+
+    <nav class="drawer-nav">
+      <button type="button" class="navitem" data-go="daily">
+        <span class="navitem-name">Päivän biisit</span>
+        <span class="navitem-note" id="nav-daily-note">viisi biisiä</span>
+      </button>
+
+      <button type="button" class="navitem" data-go="free">
+        <span class="navitem-name">Vapaa peli</span>
+        <span class="navitem-note">viisi satunnaista biisiä</span>
+      </button>
+
+      <button type="button" class="navitem navitem-sub" id="free-reset" data-go="refree" hidden>
+        <span class="navitem-name">Uusi sarja</span>
+        <span class="navitem-note" id="nav-free-note">aloita sarja alusta</span>
+      </button>
+
+      <hr class="drawer-rule">
+
+      <button type="button" class="navitem" data-go="stats"><span class="navitem-name">Tilastot</span></button>
+      <button type="button" class="navitem" data-go="help"><span class="navitem-name">Ohjeet</span></button>
+      <!-- Palaute kerättiin tähän asti käsin WhatsAppilla. Tämä kerää sen
+           siellä missä se syntyy, myös niiltä joita ei tunne. -->
+      <a class="navitem" id="feedback-link" href="#">
+        <span class="navitem-name">Anna palautetta</span>
+      </a>
+      <a class="navitem" id="suggest-link" href="#">
+        <span class="navitem-name">Ehdota biisiä</span>
+      </a>
+    </nav>
+
+    <!-- Valikon alle jäi ruudusta yli puolet tyhjäksi (mitattuna 429 px
+         844:stä). Putki on se luku joka saa palaamaan huomenna, ja se oli
+         piilossa Tilastojen takana. Nyt se on siinä missä katse jo on. -->
+    <!-- Kaksi lohkoa, kaksi eri ehtoa. Luvut tulevat kootuista tilastoista,
+         viikko suoraan päivien omista tuloksista. Ne voivat olla eri tilassa:
+         tilastojen nollaus jättää kuluvan päivän tuloksen paikalleen, jolloin
+         yhteinen ehto olisi piilottanut myös viikon. -->
+    <div class="dstats" id="drawer-stats" hidden>
+      <div id="ds-numbers">
+        <p class="dstats-head">Oma tilanne</p>
+        <p class="dstats-streak"><strong id="ds-streak">0</strong> <span id="ds-streak-label">päivän putki</span></p>
+        <dl class="dstats-grid">
+          <div><dd id="ds-played">0</dd><dt>pelattua päivää</dt></div>
+          <div><dd id="ds-best">0</dd><dt>paras tulos</dt></div>
+          <div><dd id="ds-hit">–</dd><dt>tunnistettu</dt></div>
+          <div><dd id="ds-longest">0</dd><dt>pisin putki</dt></div>
+        </dl>
+      </div>
+
+      <!-- Viikko kerrallaan: pylvään korkeus on sinä päivänä tunnistetut
+           biisit. Putkiluku kertoo että päiviä on peräkkäin, tämä kertoo
+           miten ne menivät. Sama viiden pylvään kieli kuin sanamerkissä. -->
+      <div id="ds-week-block">
+        <p class="dstats-head dstats-week-head">Viikko</p>
+        <ol class="dweek" id="ds-week"></ol>
+      </div>
+    </div>
+
+    <p class="drawer-foot" id="drawer-foot"></p>
+  </aside>
+
+  <!-- Oikea kisko, vain leveällä näytöllä. Vasemmalla on navigointi ja oma
+       tilanne pitkällä aikavälillä, oikealla käynnissä oleva sarja: mikä
+       biisi on vuorossa, miten muut menivät. Sisältö siirretään tänne
+       keskipalstalta eikä monisteta, ks. siirraKiskoon. -->
+  <aside class="rail" id="rail" aria-label="Sarjan tilanne" hidden>
+    <p class="rail-head">Sarja</p>
+    <div class="rail-body" id="rail-body"></div>
+
+    <!-- Pisteasteikko kiskon alalaitaan. Mittari soittimen alla kertoo
+         missä kohtaa ollaan, mutta ei sitä mitä seuraava askel maksaa.
+         Ohittamisen hinnan pitää olla nähtävissä ennen ohittamista. -->
+    <div class="rail-foot">
+      <!-- Puhelimessa on laitteen omat äänenvoimakkuusnäppäimet, koneella ei
+           mitään: siellä ainoa keino on käyttöjärjestelmän mikseri. Siksi
+           säädin on juuri työpöydän kiskossa eikä valikossa. -->
+      <p class="rail-head">Äänenvoimakkuus <span id="aani-arvo"></span></p>
+      <input type="range" class="aani" id="aani" min="0" max="100" step="5"
+             aria-label="Äänenvoimakkuus">
+
+      <p class="rail-head rail-head-2">Pisteet</p>
+      <ol class="pisteet" id="rail-points"></ol>
+    </div>
+  </aside>
+
+  <!-- Palkin tausta on täysleveä, mutta sen sisältö noudattaa samaa palstaa
+       kuin muu sivu: leveällä näytöllä sanamerkki ja sisältö olivat 400 px
+       eri kohdissa eikä mikään ollut linjassa. -->
+  <header class="bar">
+    <div class="bar-inner">
+      <button type="button" class="iconbtn" id="menu-btn" aria-label="Avaa valikko" aria-expanded="false" aria-controls="drawer">
+        <span class="burger" aria-hidden="true"></span>
+      </button>
+      <span class="wordmark">Hitti<em>Spotti</em></span>
+      <span class="bar-tag" id="bar-tag"></span>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- Sivun varsinainen otsikko. Ulkoasussa sen paikan ottaa sanamerkki,
+         mutta hakukone ja ruudunlukija tarvitsevat oikean otsikon. -->
+    <h1 class="sr-only">HittiSpotti – tunnista suomalainen biisi 0,1 sekunnin pätkästä</h1>
+
+    <!-- PELI -->
+    <section id="view-game" class="view view-game" hidden>
+      <!-- Yksi ruudullinen, jonka korkeus ei riipu arvauslokista: soitin ei
+           saa hypähtää joka ohituksella. Loki jää tämän lohkon ulkopuolelle. -->
+      <div class="screen">
+      <div class="meta">
+        <span class="mode">
+          <span id="mode-label">Päivän biisit</span>
+          <span id="mode-sub"></span>
+        </span>
+        <span id="score-label" class="meta-score">0 p</span>
+      </div>
+      <div class="tierbar" id="tierbar" aria-label="Vaikeustaso"></div>
+
+      <div class="stage">
+        <div class="player">
+          <button type="button" id="play-btn" class="play-btn" aria-label="Soita pätkä">
+            <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="ring-bg" cx="60" cy="60" r="54"></circle>
+              <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="54"></circle>
+            </svg>
+            <span class="play-icon is-play" id="play-icon" aria-hidden="true"></span>
+          </button>
+          <p class="clip-len" id="clip-len">0,1<span class="unit">s</span></p>
+          <p class="stake" id="stake"></p>
+        </div>
+      </div>
+
+      <p class="hint" id="hint"></p>
+
+      <!-- Mittari kuuluu napin viereen: se kertoo mitä ohitus maksaa. -->
+      <ol class="ladder" id="ladder"></ol>
+
+      <form id="guess-form" class="guess" autocomplete="off">
+        <div class="field">
+          <input id="guess-input" type="search" name="haku" placeholder="Artisti tai kappale" aria-label="Arvaus"
+                 aria-autocomplete="list" aria-controls="suggestions" aria-expanded="false"
+                 autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
+                 enterkeyhint="search">
+          <ul id="suggestions" class="suggestions" role="listbox" hidden></ul>
+        </div>
+        <div class="row">
+          <button type="button" class="btn btn-wide" id="action-btn">Ohita</button>
+        </div>
+      </form>
+
+      <div id="reveal" class="reveal" hidden>
+        <img id="reveal-art" class="reveal-art" alt="" width="96" height="96">
+        <div class="reveal-text">
+          <p id="reveal-verdict" class="reveal-verdict"></p>
+          <p id="reveal-title" class="reveal-title"></p>
+          <p id="reveal-artist" class="reveal-artist"></p>
+          <!-- Applen esikuunteluehdot edellyttävät linkkiä kappaleeseen. -->
+          <a id="reveal-apple" class="reveal-apple" href="#" target="_blank" rel="noopener noreferrer">
+            Kuuntele Apple Musicissa
+            <svg viewBox="0 0 12 12" width="9" height="9" aria-hidden="true" focusable="false">
+              <path d="M3 1h8v8M11 1 1.5 10.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+        <p id="reveal-points" class="reveal-points"></p>
+
+        <!-- Vapaaehtoinen arvio. Ei estä eteenpäin menoa eikä näytä nykyistä
+             tasoa, jottei se ohjaa vastausta. -->
+        <div class="rate" id="rate">
+          <p class="rate-q" id="rate-q">Miltä tämä tuntui?</p>
+          <div class="tierbar rate-row" id="rate-row"></div>
+        </div>
+
+        <div class="row">
+          <button type="button" class="btn" id="replay-btn">Kuuntele</button>
+          <button type="button" class="btn btn-accent" id="next-btn">Seuraava</button>
+        </div>
+      </div>
+      </div><!-- /.screen -->
+
+      <ul id="guess-log" class="log" aria-live="polite"></ul>
+    </section>
+
+    <!-- TULOKSET -->
+    <section id="view-results" class="view" hidden>
+      <!-- Yksi kärki, ei viittä päällekkäistä tyylikerrosta: päiväys hiljaa
+           ylhäällä, pisteluku isona, yhteenveto pienenä alla. -->
+      <h2 id="results-title" class="results-dateline">Tulokset</h2>
+      <p class="score-big"><strong id="results-score">0</strong> <span class="unit">pistettä</span></p>
+      <p class="results-sub" id="results-sub"></p>
+      <ol id="results-list" class="results"></ol>
+      <div class="row row-wrap">
+        <button type="button" class="btn btn-accent" id="share-btn">Jaa tulos</button>
+        <button type="button" class="btn" id="results-again-btn">Vapaa peli</button>
+      </div>
+    </section>
+
+    <!-- TILASTOT -->
+    <section id="view-stats" class="view" hidden>
+      <h2 class="big">Tilastot</h2>
+      <div class="stats" id="stat-grid"></div>
+      <div class="row row-wrap">
+        <button type="button" class="btn" data-go="back">Takaisin peliin</button>
+        <button type="button" class="btn btn-quiet" id="reset-stats-btn">Nollaa tilastot</button>
+      </div>
+
+      <!-- Peli lähettää kierroksista ja arvioista koosteen tasojen tarkentamiseksi.
+           Se on niin vähän kuin mahdollista, mutta se on silti lähetys, joten
+           siitä kerrotaan ja sen saa kytkeä pois. -->
+      <label class="lupa">
+        <input type="checkbox" id="data-consent" checked>
+        <span>
+          <strong>Auta tarkentamaan vaikeustasoja</strong>
+          <span class="lupa-note">Lähettää jokaisesta kierroksesta biisin, tason ja sen monenko sekunnin pätkästä tunnistit, sekä arviosi jos annat sellaisen. Ei nimeä, ei tunnistetta, ei mitään joka yhdistäisi kierroksesi toisiinsa.</span>
+        </span>
+      </label>
+    </section>
+
+    <!-- OHJEET
+         Kysymyksinä ja haitarina, ei yhtenä pitkänä tekstiseinänä. Kysymykset
+         mahtuvat yhdelle ruudulle, joten näkee kerralla mihin täältä saa
+         vastauksen. Toteutus on selaimen oma details-elementti: se toimii
+         ilman JavaScriptiä ja on näppäimistöllä ja ruudunlukijalla
+         käytettävissä ilman erillistä työtä. -->
+    <section id="view-help" class="view" hidden>
+      <h2 class="big">Ohjeet</h2>
+      <p class="help-lead">Miten peli toimii, mistä biisit tulevat ja mitä tietoja sinusta kerätään.</p>
+
+      <div class="faq">
+        <details>
+          <summary><span>Miten peliä pelataan?</span></summary>
+          <div class="faq-body">
+            <ol class="help">
+              <li>Paina soittopainiketta. Kuulet biisistä <strong>0,1 sekuntia</strong>.</li>
+              <li>Kirjoita arvaus ja valitse kappale listasta. Voit hakea artistilla tai biisin nimellä. Sama nappi vaihtuu ohituksesta arvaukseksi, kun olet valinnut biisin.</li>
+              <li>Väärä arvaus tai ohitus pidentää pätkää: 0,1 → 0,5 → 2 → 8 → 15 sekuntia.</li>
+              <li>Pisteet putoavat joka askeleella: <strong>1 200 · 850 · 600 · 425 · 300</strong>. Jos 15 sekunnin jälkeenkään ei nappaa, kierros menee nollille.</li>
+            </ol>
+            <p>Jo arvattu biisi näkyy hakulistassa harmaana merkinnällä <em>arvattu</em>, eikä sitä voi valita uudestaan.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span>Ääntä ei kuulu, mikä avuksi?</span></summary>
+          <div class="faq-body">
+            <p><strong>iPhonella</strong> yleisin syy on äänetön tila. Laitteen sivussa oleva kytkin vaimentaa myös selaimen äänet, vaikka musiikki muuten kuuluisi. Ota se pois päältä.</p>
+            <p>Jos palasit peliin toisesta sovelluksesta eikä ääntä kuulu, paina soittopainiketta kerran: peli rakentaa äänen uusiksi ensimmäisellä painalluksella.</p>
+            <p>Kuulokkeet auttavat aina. Puhelimen kaiuttimesta 0,1 sekunnin pätkä on huomattavasti vaikeampi tunnistaa.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span>Mitä pelimuotoja on?</span></summary>
+          <div class="faq-body">
+            <p><strong>Päivän biisit</strong> on viiden biisin sarja, joka on sama kaikille pelaajille saman päivän aikana. Mukana on yksi biisi jokaiselta vaikeustasolta, ja ne tulevat helpoimmasta vaikeimpaan. Maksimi on 6 000 pistettä.</p>
+            <p><strong>Vapaa peli</strong> on samanlainen viiden biisin sarja, mutta biisit arvotaan ja sarjoja voi pelata niin monta kuin haluaa. Valikon <strong>Uusi sarja</strong> aloittaa kesken olevan sarjan alusta.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span>Mikä on soittimen yläpuolella oleva rivi?</span></summary>
+          <div class="faq-body">
+            <p>Tasorivi siirtää biisien välillä molemmissa pelimuodoissa. Biisit pysyvät paikoillaan, joten voit jättää vaikean kesken, kokeilla toista ja palata siihen myöhemmin. Edistyminen odottaa siellä missä sen jätit.</p>
+            <p>Aloitetun biisin taso näkyy värillisellä reunuksella. Pelattu biisi näkyy rivillä vihreänä jos tunnistit sen, ja yliviivattuna jos et.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span>Voinko jakaa tulokseni?</span></summary>
+          <div class="faq-body">
+            <p>Tulosnäkymän <strong>Jaa tulos</strong> tekee tuloksesta kuvan. Päivän biisien kuvassa näkyvät vain neliöt, eivät biisien nimet, joten sen voi lähettää myös niille jotka eivät ole vielä pelanneet. Vapaan pelin kuvassa biisit näkyvät, koska ne ovat jokaisella eri.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span>Mistä biisit tulevat?</span></summary>
+          <div class="faq-body">
+            <p>Mukana on sekä suomen- että englanninkielisiä suomalaisia kappaleita. Pätkät ovat Applen julkisia 30 sekunnin esikuunteluja, jotka selain hakee suoraan Applelta. Peli ei tallenna musiikkia. Pätkä alkaa esikuuntelun alusta, ja mahdollinen hiljaisuus ohitetaan.</p>
+            <p>Hakulistalla on enemmän biisejä kuin peli koskaan jakaa arvattavaksi: osa on mukana vain täytteenä, jottei oikeaa vastausta voisi päätellä siitä mitä listalla sattuu olemaan.</p>
+            <p>Puuttuuko jokin? Valikon <strong>Ehdota biisiä</strong> lähettää ehdotuksen.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span>Kuka päättää vaikeustasot?</span></summary>
+          <div class="faq-body">
+            <p>Kun biisi paljastuu, voit kertoa miltä se sinusta tuntui. Arvio on vapaaehtoinen eikä vaikuta pisteisiin. Peli myös merkitsee muistiin, monenko sekunnin pätkästä tunnistit biisin, ja se kertoo vaikeudesta enemmän kuin mikään arvio.</p>
+            <p>Molemmat säilyvät kokonaisina omassa selaimessasi, ja molemmista lähtee nimetön kooste tasojen tarkentamiseksi. Näin nähdään myös se, ovatko nämä kaksi eri mieltä: biisi voi tuntua vaikealta vaikka melkein kaikki tunnistavat sen heti. Lähetyksen saa kytkeä pois <strong>Tilastot</strong>-sivun alalaidasta.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span>Mitä tietoja minusta kerätään?</span></summary>
+          <div class="faq-body">
+            <p>Tulokset, tilastot ja omat arviot tallentuvat vain selaimeesi. Peli ei kysy nimeä, sähköpostia eikä mitään muutakaan, eikä sinusta luoda tunnistetta.</p>
+            <p>Ulos lähtee kolme asiaa. <strong>Kävijälaskuri</strong> (GoatCounter) kirjaa käynnin ja kaksi tapahtumaa: päivän sarjan aloituksen ja sen valmiiksi pelaamisen. <strong>Kierroksista</strong> lähtee biisi, sen taso, monenko sekunnin pätkästä tunnistit sen ja kumpaa pelimuotoa pelasit. <strong>Arvioista</strong> lähtee biisi, sen taso ja se mitä vastasit, jos vastasit.</p>
+            <p>Nämä ovat vaikeustasoja varten. Kierros mittaa mitä ihmiset oikeasti tekevät, arvio mitä he ajattelivat, ja vasta yhdessä ne kertovat mikä biisi on minkäkin vaikea. Mukana ei mene päivämäärää, tunnistetta eikä mitään joka yhdistäisi kaksi kierrostasi toisiinsa: palvelin laskee vain summia biiseittäin. Voit kytkeä lähetyksen pois <strong>Tilastot</strong>-sivun alalaidasta.</p>
+            <p>Ei evästeitä, ei kirjautumista, ei seurantaa muille sivustoille. Siksi tämä sivu ei tarvitse evästeilmoitusta.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="row">
+        <button type="button" class="btn" data-go="back">Takaisin peliin</button>
+      </div>
+    </section>
+
+    <!-- LATAUS -->
+    <section id="view-loading" class="view">
+      <p class="hint" id="loading-text">Ladataan biisejä…</p>
+      <!-- Näkyy vasta jos lataus kaatuu: hetkellinen katkos puhelimessa ei
+           saa jättää ainoaksi ulospääsyksi sivun lataamista uudestaan. -->
+      <div class="row" id="loading-retry" hidden>
+        <button type="button" class="btn" id="retry-btn">Yritä uudelleen</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Jakoruutu. Oma näkymä eikä hiljainen kopiointi, jotta pelaaja näkee
+       mitä on lähettämässä ennen kuin lähettää. Sivutuotteena tämä korjaa
+       Safarin eleongelman: jakonapin painallus tämän sisällä on oma tuore
+       käyttäjän ele, eikä navigator.share menetä oikeuttaan odottelun takia. -->
+  <div class="sheet-scrim" id="share-scrim" hidden></div>
+  <aside class="sheet" id="share-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="share-sheet-title">
+    <div class="sheet-head">
+      <h2 class="sheet-title" id="share-sheet-title">Jaa tulos</h2>
+      <button type="button" class="iconbtn" id="share-close" aria-label="Sulje jakoruutu">✕</button>
+    </div>
+    <figure class="sheet-preview">
+      <img id="share-img" alt="Tuloskuva jaettavaksi">
+    </figure>
+    <p class="sheet-note" id="share-note"></p>
+    <div class="sheet-actions">
+      <button type="button" class="btn btn-accent" id="share-native" hidden>Jaa kuva</button>
+      <button type="button" class="btn" id="share-copy-img">Kopioi kuva</button>
+      <button type="button" class="btn" id="share-copy-link">Kopioi linkki</button>
+    </div>
+    <pre id="share-preview" class="share" hidden></pre>
+  </aside>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="app.js?v=90"></script>
+
+  <!-- Kävijälaskenta: ei evästeitä, ei henkilötietoja, ei seurantaa yli
+       sivustorajojen – siksi tämä ei vaadi suostumusikkunaa. Ladataan
+       viimeisenä ja asynkronisesti, joten peli ei odota sitä. -->
+  <script data-goatcounter="https://hittispotti.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+
+<style id="esikatselu-raita">
+  /* Ohut raita kertoo yhdellä silmäyksellä että tämä ei ole oikea sivusto.
+     Kiinteä sijainti ja pointer-events:none, jottei se siirrä eikä peitä
+     mitään: esikatselun pitää näyttää samalta kuin lopputuloksen. */
+  #esikatselu-raita-el {
+    position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 100;
+    background: repeating-linear-gradient(90deg, #e0a419 0 12px, #0a0908 12px 24px);
+    pointer-events: none;
+  }
+</style>
+<div id="esikatselu-raita-el" aria-hidden="true"></div>
+</body>
+</html>
