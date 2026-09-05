@@ -24,7 +24,7 @@
    * välimuistissa tyylimuutosten yli, mutta uusi katalogi on eri osoite ja
    * tulee varmasti perille – vanha versio antaisi pelaajalle eri päivän
    * biisit kuin muille. */
-  const KATALOGI = "songs.json?k=7";
+  const KATALOGI = "songs.json?k=8";
 
   // ---------- Tila ----------
   const state = {
