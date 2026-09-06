@@ -82,8 +82,12 @@
      ilman vieritystä. */
   --loki: 128px;
   /* Taustaosoitteen koko työpöydällä. Rivikorkeus on 1, joten tämä on myös
-     sen korkeus, ja siitä lasketaan soittimen yläpuolelle tarvittava tila. */
+     sen korkeus, ja siitä lasketaan soittimen yläpuolelle tarvittava tila.
+     --vesileima-tila on kaistan väljyys osoitteen ympärillä: täyte on
+     osoite + tila, ja osoite asettuu tilan puoliväliin. Yhdestä luvusta
+     johdettuna ne eivät voi ajautua eri tahtiin. */
   --vesileima: 84px;
+  --vesileima-tila: calc(var(--s7) + var(--s6));
 
   /* Väliasteikko. Kaikki marginaalit, täytteet ja gapit tulevat täältä.
      Aiemmin käytössä oli 21 eri arvoa (1,2,4,5,6,7,8,9,10,11,12,13,14,16,
@@ -897,14 +901,21 @@ button.tchip:hover { color: var(--text); }
     display: block;
     position: absolute;
     left: 50%;
-    top: 0;
+    /* Kaistan keskelle eikä ylälaitaan: ylhäällä se roikkui otsikkorivissä
+       kiinni ja alle jäi kaikki väljyys. Puolet kaistan omasta väljyydestä
+       ylle, puolet alle. */
+    top: calc(var(--vesileima-tila) / 2);
     transform: translateX(-50%);
     margin: 0;
     z-index: 0;
-    font-family: var(--display);
+    /* Ei display-kirjasinta. Bricolagen kirjainmuodot ovat pieninä hauskoja
+       mutta 84 pikselissä sen p ja f alkavat näyttää omituisilta, ja tämä on
+       sivun suurin teksti. Järjestelmäkirjasin on neutraali ja häviää
+       taustaan, mikä on tässä juuri tarkoitus. */
+    font-family: var(--sans);
     font-size: var(--vesileima);
-    font-weight: 800;
-    letter-spacing: -.05em;
+    font-weight: 700;
+    letter-spacing: -.02em;
     line-height: 1;
     white-space: nowrap;
     /* Varaväri ensin: jos selain ei tue color-mixiä, osoite näkyy silti. */
@@ -1691,9 +1702,8 @@ body.sheet-open { overflow: hidden; }
    yrityksessä kävi ("Hi…otti"). Kaista lasketaan nimen omasta koosta, jottei
    kiinteä luku vanhene kun kokoa säädetään. */
 @media (min-width: 1200px) {
-  :root { --vesileima: 84px; }
   .view-game .stage {
-    padding-top: calc(var(--s7) + var(--vesileima) + var(--s6));
+    padding-top: calc(var(--vesileima) + var(--vesileima-tila));
   }
 }
 
@@ -1703,9 +1713,9 @@ body.sheet-open { overflow: hidden; }
    Peli menee nimen edelle: nimi ja sen välit kutistuvat. 1366x768 on yhä
    yleinen kannettavan tarkkuus, joten tämä ei ole reunatapaus. */
 @media (min-width: 1200px) and (max-height: 820px) {
-  :root { --vesileima: 44px; }
-  .view-game .stage {
-    padding-top: calc(var(--s4) + var(--vesileima) + var(--s3));
+  :root {
+    --vesileima: 44px;
+    --vesileima-tila: calc(var(--s4) + var(--s3));
   }
 }
 
