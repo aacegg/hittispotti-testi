@@ -303,16 +303,52 @@ body.drawer-open .drawer { transform: none; visibility: visible; }
 .drawer-nav { display: flex; flex-direction: column; }
 
 /* Valikon rivit erottaa hiusviiva, ei taustalaatikko. */
+/* Valikon rivit näyttivät pelkältä tekstiltä. Vika oli oikea, mutta ei
+   ratkea laatikoilla: sääntö 2 varaa täytetyn pinnan soittonapille, ja jos
+   kuusi valikkoriviä saa oman laatikkonsa, soittonappi lakkaa erottumasta.
+   Hover-korostus oli olemassa, mutta puhelimessa ei ole hoveria, joten
+   siellä riveissä ei ollut mitään vihjettä.
+
+   Kaksi merkkiä laatikon sijaan: pysyvä kulmamerkki oikeassa reunassa
+   kertoo levossa että rivi vie jonnekin, ja painallus siirtää sitä ja
+   sytyttää elävän värin. Molemmat ovat liikettä ja väriä, eivät pintaa. */
 .navitem {
+  position: relative;
   display: block;
   width: 100%;
-  padding: var(--s4) 0;
+  padding: var(--s4) var(--s6) var(--s4) 0;
   border: 0;
   border-top: 1px solid var(--line-soft);
   background: transparent;
   text-align: left;
   cursor: pointer;
 }
+/* Merkki piirretään reunaviivoista eikä ladota kirjasimesta. Bricolagen
+   oma "›" mitattiin 10 px leveäksi niin että muste täytti koko leveyden
+   ilman sivuvälejä, eli glyyfi ei ole kunnollinen ja se piirtyi rikkinäisenä.
+   Sama tapa kuin soittoikonissa: muoto tulee CSS:stä, joten se on aina
+   samanlainen ja väri seuraa elävää väriä. */
+.navitem::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--dim);
+  border-top: 2px solid var(--dim);
+  transform: translateY(-50%) rotate(45deg);
+  transition: border-color .15s ease, transform .15s ease;
+}
+.navitem:hover::after,
+.navitem:focus-visible::after { border-color: var(--live); }
+/* Painallus: merkki nytkähtää menosuuntaan ja syttyy. Kosketusnäytöllä tämä
+   on ainoa hetki jolloin laite voi vastata, joten se ei saa jäädä pois. */
+.navitem:active::after {
+  border-color: var(--live);
+  transform: translateY(-50%) translateX(3px) rotate(45deg);
+}
+.navitem:active .navitem-name { color: var(--live); }
 /* Palauterivi on linkki eikä nappi, joten selaimen omat linkkityylit pitää
    nollata erikseen. Muuten se olisi ainoa sininen alleviivattu rivi. */
 a.navitem { color: inherit; text-decoration: none; }
@@ -495,7 +531,12 @@ a.navitem { color: inherit; text-decoration: none; }
      molemmat, ja niiden mukana katoaa koko kysymys siitä missä nappi
      kulloinkin asuu. */
   .scrim, #menu-btn, .drawer-head #drawer-close { display: none; }
-  .drawer-head .wordmark { display: none; }
+  /* Nimi kuuluu työpöydällä palkin ylänurkkaan, ei keskipalstan ylle.
+     Sanamerkki oli tähän asti yläpalkissa ja piilossa sivupalkista, jolloin
+     palkin ylänurkka oli tyhjä ja nimi kellui keskellä ruutua. Nyt se on
+     siellä missä silmä sitä hakee. Yläpalkista se piilotetaan, jottei nimi
+     ole kahdesti samalla ruudulla. */
+  .bar-inner .wordmark { display: none; }
   .drawer-head { margin-bottom: var(--s4); }
 
   /* Oma tilanne ja alateksti painetaan palkin alalaitaan, jolloin tyhjä
