@@ -508,6 +508,9 @@ a.navitem { color: inherit; text-decoration: none; }
 .dstats-grid dt { font-size: var(--f1); color: var(--dim); }
 
 .drawer-foot { margin-top: auto; padding-top: var(--s6); font-size: var(--f1); line-height: 1.6; color: var(--dim); }
+/* Versio omalle rivilleen ja hiljaisemmaksi kuin sitä edeltävä lause: se on
+   tunniste jota etsitään, ei tietoa jota luetaan. */
+.drawer-versio { display: block; margin-top: var(--s2); font-variant-numeric: tabular-nums; }
 
 /* ---------- Sivupalkki kiinteänä leveällä näytöllä ----------
    Työpöydällä sisältö on 540 pikselin palsta keskellä ja molemmin puolin jää

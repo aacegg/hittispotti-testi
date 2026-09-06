@@ -26,6 +26,19 @@
    * biisit kuin muille. */
   const KATALOGI = "songs.json?k=9";
 
+  /* Tuoteversio, eri asia kuin osoitteiden ?v=-numero.
+   *
+   * ?v= on välimuistin murtaja: sen ainoa tehtävä on olla merkkijono jota ei
+   * ole ennen käytetty, ja se kasvaa jokaisesta julkaisusta. Juuri siksi se
+   * on myös ainoa numero jolla vian voi toistaa, ja se kulkee palautteen
+   * mukana.
+   *
+   * Tämä taas on se numero jonka pelaaja näkee ja osaa sanoa ääneen. Se
+   * vaihtuu harvoin ja vain päätöksestä. Palauteviestissä ne ovat molemmat,
+   * muodossa "versio 1.0 (100)": pelaaja tunnistaa alun, ja suluista näkee
+   * täsmälleen mikä rakenne hänellä oli. */
+  const TUOTEVERSIO = "1.0";
+
   // ---------- Tila ----------
   const state = {
     songs: [],           // kaikki – näistä haetaan ja arvataan
@@ -417,7 +430,12 @@
     el.navDailyNote.textContent = done
       ? `pelattu tänään, ${fmt(done.score)} p`
       : `viisi biisiä, ${dateLine(new Date())}`;
-    el.drawerFoot.textContent = `${state.pool.length} arvattavaa biisiä · tulokset tallentuvat vain tähän selaimeen`;
+    /* Kaksi riviä: ensimmäinen kertoo pelistä, toinen tunnistaa version.
+       Versio omalle rivilleen, jottei se katoa lauseen jatkoksi silloin kun
+       sitä nimenomaan etsitään. */
+    el.drawerFoot.innerHTML =
+      `${state.pool.length} arvattavaa biisiä · tulokset tallentuvat vain tähän selaimeen`
+      + `<span class="drawer-versio">HittiSpotti ${TUOTEVERSIO}</span>`;
     // "Uusi sarja" koskee vain vapaata peliä, joten se näkyy vasta siellä.
     el.freeReset.hidden = !(state.mode === "free" && state.view === "game");
     el.navFreeNote.textContent = !freeStarted() ? "aloita sarja alusta"
@@ -1936,7 +1954,7 @@
     // alkaa, eikä käyttäjän tarvitse ensin poistaa mitään.
     if (el.feedbackLink) {
       el.feedbackLink.href = postilinkki("HittiSpotti-palaute",
-        `\n\n---\nversio ${versio} · ${laite()}`);
+        `\n\n---\nversio ${TUOTEVERSIO} (${versio}) · ${laite()}`);
     }
     if (el.suggestLink) {
       el.suggestLink.href = postilinkki("Biisiehdotus",
