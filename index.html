@@ -27,17 +27,17 @@
        kuvakkeesta kiinni omassa välimuistissaan sitkeämmin kuin mistään
        muusta, eikä pelkkä uusi tiedostosisältö samassa osoitteessa riitä
        vaihtamaan sitä. -->
-  <link rel="icon" href="favicon.svg?v=100" type="image/svg+xml">
+  <link rel="icon" href="favicon.svg?v=101" type="image/svg+xml">
   <!-- iOS ei tue SVG:tä kotinäytön kuvakkeena: SVG:llä se otti sivusta
        ruudunkaappauksen kuvakkeen sijaan. 180 px on iPhonen koko. -->
-  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=100">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=100">
-  <link rel="manifest" href="manifest.webmanifest?v=100">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=101">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=101">
+  <link rel="manifest" href="manifest.webmanifest?v=101">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="HittiSpotti">
   <link rel="preload" href="fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css?v=100">
+  <link rel="stylesheet" href="style.css?v=101">
 
   <script type="application/ld+json">
   {
@@ -77,9 +77,13 @@
         <span class="navitem-note">viisi satunnaista biisiä</span>
       </button>
 
+      <!-- Yksi teksti, ei nimeä ja selitettä. Rivillä luki ennen "Uusi sarja"
+           ja sen perässä "aloita sarja alusta", eli sama asia kahdesti eri
+           sanoin. Menetettävät pisteet kerrottiin myös tässä, mutta ne ovat
+           yhä varmistuksessa jonka nappi avaa, eli varoitus ei kadonnut vaan
+           siirtyi sinne missä se on ajankohtainen. -->
       <button type="button" class="navitem navitem-sub" id="free-reset" data-go="refree" hidden>
-        <span class="navitem-name">Uusi sarja</span>
-        <span class="navitem-note" id="nav-free-note">aloita sarja alusta</span>
+        <span class="navitem-name">Aloita peli alusta</span>
       </button>
 
       <hr class="drawer-rule">
@@ -416,7 +420,7 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
-  <script src="app.js?v=100"></script>
+  <script src="app.js?v=101"></script>
 
   <!-- Kävijälaskenta: ei evästeitä, ei henkilötietoja, ei seurantaa yli
        sivustorajojen – siksi tämä ei vaadi suostumusikkunaa. Ladataan

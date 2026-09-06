@@ -106,7 +106,6 @@
     dsLongest: $("#ds-longest"),
     navDailyNote: $("#nav-daily-note"),
     freeReset: $("#free-reset"),
-    navFreeNote: $("#nav-free-note"),
     bar: document.querySelector(".bar"),
     barTag: $("#bar-tag"),
     loadingText: $("#loading-text"),
@@ -436,11 +435,10 @@
     el.drawerFoot.innerHTML =
       `${state.pool.length} arvattavaa biisiä · tulokset tallentuvat vain tähän selaimeen`
       + `<span class="drawer-versio">HittiSpotti ${TUOTEVERSIO}</span>`;
-    // "Uusi sarja" koskee vain vapaata peliä, joten se näkyy vasta siellä.
+    /* "Aloita peli alusta" koskee vain vapaata peliä, joten se näkyy vasta
+       siellä. Rivillä ei ole enää selitettä: teksti kertoo jo mitä nappi
+       tekee, ja menetettävät pisteet lukevat varmistuksessa jonka se avaa. */
     el.freeReset.hidden = !(state.mode === "free" && state.view === "game");
-    el.navFreeNote.textContent = !freeStarted() ? "aloita sarja alusta"
-      : state.score ? `nollaa sarja ja ${fmt(state.score)} p`
-      : "nollaa aloitettu sarja";
     document.querySelectorAll("[data-go]").forEach((b) => {
       const isMode = b.dataset.go === "daily" || b.dataset.go === "free";
       if (isMode) b.classList.toggle("is-active", state.view === "game" && state.mode === b.dataset.go);
