@@ -7,7 +7,7 @@
  * Välimuistin nimessä on versio. Kun se vaihtuu, vanha poistetaan kokonaan,
  * joten jumiin jäänyttä välimuistia ei pääse syntymään.
  */
-const VERSIO = "hittispotti-v97";
+const VERSIO = "hittispotti-v98";
 
 /* Sovelluksen juuri. Vain tähän osoitettu navigointi kelpaa offline-varasivuksi. */
 const JUURI = new URL("./", self.location).pathname;
@@ -17,12 +17,12 @@ const JUURI = new URL("./", self.location).pathname;
  * lataamista kahdesti. Se päätyy välimuistiin ensimmäisellä haulla. */
 const POHJA = [
   "./",
-  "./style.css?v=97",
-  "./app.js?v=97",
-  "./favicon.svg?v=97",
-  "./icon-180.png?v=97",
-  "./icon-192.png?v=97",
-  "./manifest.webmanifest?v=97",
+  "./style.css?v=98",
+  "./app.js?v=98",
+  "./favicon.svg?v=98",
+  "./icon-180.png?v=98",
+  "./icon-192.png?v=98",
+  "./manifest.webmanifest?v=98",
   "./fonts/bricolage-latin.woff2",
   "./fonts/bricolage-latin-ext.woff2",
 ];
