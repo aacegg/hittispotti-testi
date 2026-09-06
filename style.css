@@ -917,6 +917,16 @@ button.tchip:hover { color: var(--text); }
     font-family: var(--display);
     font-size: var(--vesileima);
     font-weight: 800;
+    /* Optisen koon akseli, ei pelkkä paino. Bricolage on muuttuva kirjasin,
+       jonka opsz-akseli (12-96) piirtää kirjaimet uudelleen: isolla arvolla
+       muodot ovat tiiviitä ja aukot kapeita, pienellä leveitä ja avoimia.
+       Selain valitsee arvon kirjasinkoosta, joten 84 pikselissä se otti
+       maksimin 96, ja juuri siinä f:n koukku on lyhimmillään ja
+       omituisimmillaan. Pakotetaan pieni arvo: tekstin koko ei muutu, vain
+       kirjainten piirustus.
+       Akselit annetaan tässä molemmat, koska font-variation-settings ohittaa
+       font-weightin niiltä osin kuin se listaa akseleita. */
+    font-variation-settings: "opsz" 20, "wght" 800;
     letter-spacing: -.04em;
     line-height: 1;
     white-space: nowrap;
@@ -927,7 +937,11 @@ button.tchip:hover { color: var(--text); }
     user-select: none;
     pointer-events: none;
   }
-  .vesileima em { font-style: normal; font-weight: 500; }
+  .vesileima em {
+    font-style: normal;
+    font-weight: 500;
+    font-variation-settings: "opsz" 20, "wght" 500;
+  }
 }
 /* Soitin ja sekuntiluku taustan päälle. */
 .stage .player { position: relative; z-index: 1; }
