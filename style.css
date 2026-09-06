@@ -901,21 +901,23 @@ button.tchip:hover { color: var(--text); }
     display: block;
     position: absolute;
     left: 50%;
-    /* Kaistan keskelle eikä ylälaitaan: ylhäällä se roikkui otsikkorivissä
-       kiinni ja alle jäi kaikki väljyys. Puolet kaistan omasta väljyydestä
-       ylle, puolet alle. */
-    top: calc(var(--vesileima-tila) / 2);
+    /* Kolmasosa kaistan väljyydestä ylle, loput alle. Ylälaidassa osoite
+       roikkui otsikkorivissä kiinni, mutta tasan puolivälissä se valui liian
+       alas kohti soitinta: ylempänä se lukee omana rivinään. */
+    top: calc(var(--vesileima-tila) / 3);
     transform: translateX(-50%);
     margin: 0;
     z-index: 0;
-    /* Ei display-kirjasinta. Bricolagen kirjainmuodot ovat pieninä hauskoja
-       mutta 84 pikselissä sen p ja f alkavat näyttää omituisilta, ja tämä on
-       sivun suurin teksti. Järjestelmäkirjasin on neutraali ja häviää
-       taustaan, mikä on tässä juuri tarkoitus. */
-    font-family: var(--sans);
+    /* Sama kirjasin kuin sanamerkissä. Järjestelmäkirjasinta kokeiltiin,
+       mutta se oli tähän liian väritön: osoitteen kuuluu hävitä taustaan,
+       ei näyttää siltä että se on unohtunut sinne.
+       Jälkiosa painossa 500 eikä 400: 84 pikselissä nelossataa jäi selvästi
+       ohuemmaksi kuin alkuosa, jolloin "Spotti.fi" näytti kapealta sen
+       vieressä. */
+    font-family: var(--display);
     font-size: var(--vesileima);
-    font-weight: 700;
-    letter-spacing: -.02em;
+    font-weight: 800;
+    letter-spacing: -.04em;
     line-height: 1;
     white-space: nowrap;
     /* Varaväri ensin: jos selain ei tue color-mixiä, osoite näkyy silti. */
@@ -925,7 +927,7 @@ button.tchip:hover { color: var(--text); }
     user-select: none;
     pointer-events: none;
   }
-  .vesileima em { font-style: normal; font-weight: 400; }
+  .vesileima em { font-style: normal; font-weight: 500; }
 }
 /* Soitin ja sekuntiluku taustan päälle. */
 .stage .player { position: relative; z-index: 1; }
