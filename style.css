@@ -81,6 +81,9 @@
      marginaali + 3 x 37 px) pitää tavallisen kierroksen arvaukset näkyvissä
      ilman vieritystä. */
   --loki: 128px;
+  /* Taustanimen koko. Rivikorkeus on 1, joten tämä on myös sen korkeus, ja
+     siitä lasketaan soittimen yläpuolelle tarvittava tila. */
+  --vesileima: clamp(52px, 17vw, 148px);
 
   /* Väliasteikko. Kaikki marginaalit, täytteet ja gapit tulevat täältä.
      Aiemmin käytössä oli 21 eri arvoa (1,2,4,5,6,7,8,9,10,11,12,13,14,16,
@@ -853,12 +856,49 @@ button.tchip:hover { color: var(--text); }
 
 /* ---------- Soitin ---------- */
 .stage {
+  position: relative;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: var(--s5) 0;
 }
+
+/* Pelin nimi soittimen taustalla.
+ *
+ * Sanamerkki on yläpalkissa ja työpöydällä sivupalkin nurkassa, mutta
+ * kumpikaan ei näy striimissä tai ruutukaappauksessa, joissa katsoja näkee
+ * vain pelialueen. Silloin peli on nimetön.
+ *
+ * Tausta eikä sisältö: väri on vain aavistuksen taustaa vaaleampi, se ei
+ * ota elävää väriä (se kuuluu vaikeustasolle) eikä se saa kilpailla
+ * sekuntiluvun kanssa, joka on näkymän suurin asia. Absoluuttinen sijainti
+ * ja pointer-events: none pitävät sen pois sekä sommittelusta että
+ * kosketuksista, aria-hidden ruudunlukijalta. */
+/* Soittimen yläpuolelle, ei taakse. Keskitettynä levy peitti nimen keskeltä
+   ja jäljelle jäi "Hi…otti", eli juuri se mikä piti ratkaista meni rikki. */
+.vesileima {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 0;
+  font-family: var(--display);
+  /* Leveys ajaa kokoa: nimi mitoitetaan ruutuun eikä kiinteään pistekokoon,
+     jotta se on yhtä leveä puhelimessa ja työpöydällä. */
+  font-size: var(--vesileima);
+  font-weight: 800;
+  letter-spacing: -.05em;
+  line-height: 1;
+  white-space: nowrap;
+  color: #17140f;
+  user-select: none;
+  pointer-events: none;
+}
+.vesileima em { font-style: normal; font-weight: 400; }
+/* Soitin ja sekuntiluku taustan päälle. */
+.stage .player { position: relative; z-index: 1; }
 
 .player { display: grid; justify-items: center; }
 
@@ -1624,6 +1664,19 @@ body.sheet-open { overflow: hidden; }
   .screen { min-height: 0; }
   .stage { padding: var(--s7) 0; }
   .play-btn { width: 184px; height: 184px; }
+
+  /* Kapealla ruudulla .screen venyy näytön korkuiseksi ja .stage imee
+     väljyyden, joten taustanimelle jää tilaa soittimen yläpuolelle
+     itsestään. Tästä leveydestä ylöspäin venytys loppuu ja .stage on
+     tasan soittimen korkuinen: silloin nimi jäisi levyn taakse, kuten
+     ensimmäisessä yrityksessä kävi ("Hi…otti").
+     Tila tehdään täytteellä, joka lasketaan nimen omasta koosta, jottei
+     mikään kiinteä luku vanhene kun kokoa säädetään. Väli jää siis aina
+     samaksi riippumatta ruudun leveydestä. */
+  :root { --vesileima: clamp(56px, 9vw, 84px); }
+  .view-game .stage {
+    padding-top: calc(var(--s7) + var(--vesileima) + var(--s6));
+  }
 }
 
 /* Työpöydällä keskipalsta jäi kiinni yläreunaan: mitattuna 1600 x 900:ssa
@@ -1651,6 +1704,10 @@ body.sheet-open { overflow: hidden; }
     justify-content: center;
   }
   .view-game .stage { flex: 0 0 auto; }
+
+  /* Taustanimen tila tulee 600 px:n säännöstä; ryhmä on tässä lisäksi
+     pystysuunnassa keskitetty, joten lisätty korkeus syö väljyyttä eikä
+     työnnä mitään näkymän ulkopuolelle. */
 }
 
 @media (prefers-reduced-motion: reduce) {
