@@ -81,9 +81,9 @@
      marginaali + 3 x 37 px) pitää tavallisen kierroksen arvaukset näkyvissä
      ilman vieritystä. */
   --loki: 128px;
-  /* Taustanimen koko. Rivikorkeus on 1, joten tämä on myös sen korkeus, ja
-     siitä lasketaan soittimen yläpuolelle tarvittava tila. */
-  --vesileima: clamp(52px, 17vw, 148px);
+  /* Taustaosoitteen koko työpöydällä. Rivikorkeus on 1, joten tämä on myös
+     sen korkeus, ja siitä lasketaan soittimen yläpuolelle tarvittava tila. */
+  --vesileima: 84px;
 
   /* Väliasteikko. Kaikki marginaalit, täytteet ja gapit tulevat täältä.
      Aiemmin käytössä oli 21 eri arvoa (1,2,4,5,6,7,8,9,10,11,12,13,14,16,
@@ -864,39 +864,58 @@ button.tchip:hover { color: var(--text); }
   padding: var(--s5) 0;
 }
 
-/* Pelin nimi soittimen taustalla.
+/* Osoite soittimen taustalla, vain työpöydällä.
  *
  * Sanamerkki on yläpalkissa ja työpöydällä sivupalkin nurkassa, mutta
- * kumpikaan ei näy striimissä tai ruutukaappauksessa, joissa katsoja näkee
- * vain pelialueen. Silloin peli on nimetön.
+ * kumpikaan ei näy striimissä tai ruutukaappauksessa: katsoja näkee vain
+ * pelialueen. Siksi tässä on koko osoite eikä pelkkä nimi, jotta katsoja
+ * myös löytää pelin.
  *
- * Tausta eikä sisältö: väri on vain aavistuksen taustaa vaaleampi, se ei
- * ota elävää väriä (se kuuluu vaikeustasolle) eikä se saa kilpailla
- * sekuntiluvun kanssa, joka on näkymän suurin asia. Absoluuttinen sijainti
- * ja pointer-events: none pitävät sen pois sekä sommittelusta että
- * kosketuksista, aria-hidden ruudunlukijalta. */
-/* Soittimen yläpuolelle, ei taakse. Keskitettynä levy peitti nimen keskeltä
-   ja jäljelle jäi "Hi…otti", eli juuri se mikä piti ratkaista meni rikki. */
-.vesileima {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  margin: 0;
-  z-index: 0;
-  font-family: var(--display);
-  /* Leveys ajaa kokoa: nimi mitoitetaan ruutuun eikä kiinteään pistekokoon,
-     jotta se on yhtä leveä puhelimessa ja työpöydällä. */
-  font-size: var(--vesileima);
-  font-weight: 800;
-  letter-spacing: -.05em;
-  line-height: 1;
-  white-space: nowrap;
-  color: #17140f;
-  user-select: none;
-  pointer-events: none;
+ * Puhelimessa tätä ei ole. Siellä ruutu on pieni, peli on omassa käytössä
+ * eikä näytillä, ja kaista jonka nimi vaatisi on pois pelialueelta.
+ *
+ * Soittimen yläpuolelle, ei taakse: keskitettynä levy peitti nimen keskeltä
+ * ja jäljelle jäi "Hi…otti", eli juuri se mikä piti ratkaista meni rikki.
+ *
+ * Väri seuraa vaikeustasoa kuten sanamerkin aaltomuoto yläpalkissa. Sääntö 1
+ * ei kiellä tätä: se sanoo että sivulla elää yksi väri kerrallaan, ei että
+ * vain yksi elementti saisi käyttää sitä.
+ *
+ * Tasoväri sellaisenaan olisi kuitenkin aivan liian äänekäs tämän kokoisena,
+ * joten se sekoitetaan taustaan päin. Sekoitus pitää kirkkauden samana
+ * tasosta riippumatta (mitattuna +94...+98 sävyaskelta taustasta kaikilla
+ * viidellä), joten vain sävy vaihtuu eikä osoite hyppää silmään toisilla
+ * tasoilla enemmän kuin toisilla. Siirtymä on sama 0,4 s kuin aaltomuodolla,
+ * jotta ne vaihtuvat yhtä matkaa.
+ *
+ * pointer-events: none pitää sen pois kosketuksista, aria-hidden
+ * ruudunlukijalta. */
+.vesileima { display: none; }
+
+@media (min-width: 1200px) {
+  .vesileima {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    margin: 0;
+    z-index: 0;
+    font-family: var(--display);
+    font-size: var(--vesileima);
+    font-weight: 800;
+    letter-spacing: -.05em;
+    line-height: 1;
+    white-space: nowrap;
+    /* Varaväri ensin: jos selain ei tue color-mixiä, osoite näkyy silti. */
+    color: #2e281f;
+    color: color-mix(in srgb, var(--live) 22%, var(--bg));
+    transition: color .4s ease;
+    user-select: none;
+    pointer-events: none;
+  }
+  .vesileima em { font-style: normal; font-weight: 400; }
 }
-.vesileima em { font-style: normal; font-weight: 400; }
 /* Soitin ja sekuntiluku taustan päälle. */
 .stage .player { position: relative; z-index: 1; }
 
@@ -1664,18 +1683,29 @@ body.sheet-open { overflow: hidden; }
   .screen { min-height: 0; }
   .stage { padding: var(--s7) 0; }
   .play-btn { width: 184px; height: 184px; }
+}
 
-  /* Kapealla ruudulla .screen venyy näytön korkuiseksi ja .stage imee
-     väljyyden, joten taustanimelle jää tilaa soittimen yläpuolelle
-     itsestään. Tästä leveydestä ylöspäin venytys loppuu ja .stage on
-     tasan soittimen korkuinen: silloin nimi jäisi levyn taakse, kuten
-     ensimmäisessä yrityksessä kävi ("Hi…otti").
-     Tila tehdään täytteellä, joka lasketaan nimen omasta koosta, jottei
-     mikään kiinteä luku vanhene kun kokoa säädetään. Väli jää siis aina
-     samaksi riippumatta ruudun leveydestä. */
-  :root { --vesileima: clamp(56px, 9vw, 84px); }
+/* Tila taustaosoitteelle. Tästä leveydestä ylöspäin .screen ei enää venytä
+   sommitelmaa (ks. sääntö yllä), joten .stage on tasan soittimen korkuinen
+   eikä nimelle jäisi tilaa: se jäisi levyn taakse, kuten ensimmäisessä
+   yrityksessä kävi ("Hi…otti"). Kaista lasketaan nimen omasta koosta, jottei
+   kiinteä luku vanhene kun kokoa säädetään. */
+@media (min-width: 1200px) {
+  :root { --vesileima: 84px; }
   .view-game .stage {
     padding-top: calc(var(--s7) + var(--vesileima) + var(--s6));
+  }
+}
+
+/* Matala työpöytänäyttö: nimelle varattu kaista ei mahdu. Mitattuna
+   1280x720:ssä sisältö meni 55 px ruudun yli, eli arvauskenttä ja Ohita
+   jäivät taitteen alle ja peliä olisi pitänyt vierittää joka kierroksella.
+   Peli menee nimen edelle: nimi ja sen välit kutistuvat. 1366x768 on yhä
+   yleinen kannettavan tarkkuus, joten tämä ei ole reunatapaus. */
+@media (min-width: 1200px) and (max-height: 820px) {
+  :root { --vesileima: 44px; }
+  .view-game .stage {
+    padding-top: calc(var(--s4) + var(--vesileima) + var(--s3));
   }
 }
 

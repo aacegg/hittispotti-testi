@@ -27,17 +27,17 @@
        kuvakkeesta kiinni omassa välimuistissaan sitkeämmin kuin mistään
        muusta, eikä pelkkä uusi tiedostosisältö samassa osoitteessa riitä
        vaihtamaan sitä. -->
-  <link rel="icon" href="favicon.svg?v=95" type="image/svg+xml">
+  <link rel="icon" href="favicon.svg?v=96" type="image/svg+xml">
   <!-- iOS ei tue SVG:tä kotinäytön kuvakkeena: SVG:llä se otti sivusta
        ruudunkaappauksen kuvakkeen sijaan. 180 px on iPhonen koko. -->
-  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=95">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=95">
-  <link rel="manifest" href="manifest.webmanifest?v=95">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=96">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=96">
+  <link rel="manifest" href="manifest.webmanifest?v=96">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="HittiSpotti">
   <link rel="preload" href="fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css?v=95">
+  <link rel="stylesheet" href="style.css?v=96">
 
   <script type="application/ld+json">
   {
@@ -185,11 +185,14 @@
       <div class="tierbar" id="tierbar" aria-label="Vaikeustaso"></div>
 
       <div class="stage">
-        <!-- Nimi pelialueen taustalle. Selaimen välilehti ja sivupalkki eivät
-             näy striimissä eivätkä ruutukaappauksessa, joten ilman tätä
-             katsoja ei näe mitä peliä pelataan. Koristeltu ja piilotettu
-             ruudunlukijalta: sivun oikea otsikko on h1 sivun alussa. -->
-        <p class="vesileima" aria-hidden="true">Hitti<em>Spotti</em></p>
+        <!-- Osoite pelialueen taustalle, vain työpöydällä. Striimissä ja
+             ruutukaappauksessa katsoja näkee vain pelialueen, ei selaimen
+             välilehteä eikä osoiteriviä, joten ilman tätä hän ei tiedä mitä
+             peliä katsoo eikä mistä sen löytää. Siksi tässä on koko osoite
+             eikä pelkkä nimi. Puhelimessa tätä ei ole: siellä ruutu on pieni
+             ja peli on omassa käytössä, ei näytillä.
+             Piilotettu ruudunlukijalta, koska sivun oikea otsikko on h1. -->
+        <p class="vesileima" aria-hidden="true">Hitti<em>Spotti.fi</em></p>
         <div class="player">
           <button type="button" id="play-btn" class="play-btn" aria-label="Soita pätkä">
             <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
@@ -413,7 +416,7 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
-  <script src="app.js?v=95"></script>
+  <script src="app.js?v=96"></script>
 
   <!-- Kävijälaskenta: ei evästeitä, ei henkilötietoja, ei seurantaa yli
        sivustorajojen – siksi tämä ei vaadi suostumusikkunaa. Ladataan
